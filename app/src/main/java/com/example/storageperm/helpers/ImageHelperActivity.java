@@ -5,13 +5,17 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,16 +31,21 @@ import com.google.mlkit.vision.label.ImageLabeler;
 import com.google.mlkit.vision.label.ImageLabeling;
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
 public class ImageHelperActivity extends AppCompatActivity {
     private int REQUEST_PICK_IMAGE = 1000;
+    private int REQUEST_CAPTURE_IMAGE = 1001;
     private ImageView inputImageView;
     private TextView outputTextView;
 
     private ImageLabeler imageLabeler;
+    private File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,23 +81,53 @@ public class ImageHelperActivity extends AppCompatActivity {
         startActivityForResult(intent,1001);
     }
 
+    public void onStartCamera(View view){
+        // create a file to share with Camera
+        photoFile = createPhotoFile();
+
+        Uri fileUri = FileProvider.getUriForFile(this,"com.iago.fileprovider",photoFile);
+
+        // create an Intent
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
+
+        // startActivityForResult
+        startActivityForResult(intent,REQUEST_CAPTURE_IMAGE);
+    }
+
+    private File createPhotoFile(){
+        File photoFileDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),"ML_IMAGE_HELPER");
+
+        if(!photoFileDir.exists()){
+            photoFileDir.mkdir();
+        }
+
+        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File file = new File(photoFileDir.getPath() + File.separator + name);
+
+        return file;
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //if (resultCode == RESULT_OK) {
-          //  if(resultCode == REQUEST_PICK_IMAGE){
+        if (resultCode == RESULT_OK) {
+            if(requestCode == REQUEST_PICK_IMAGE){
                 Uri uri = data.getData();
                 Bitmap bitmap = loadFromUri(uri);
                 inputImageView.setImageBitmap(bitmap);
                 runClassification(bitmap);
 
-
-
+            } else if(requestCode == REQUEST_CAPTURE_IMAGE){
+                Log.d("ML", "received callback from camera ");
+                Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                inputImageView.setImageBitmap(bitmap);
+                runClassification(bitmap);
             }
-      //  }
-    //}
+       }
+    }
 
     private Bitmap loadFromUri(Uri uri){
         Bitmap bitmap = null;
@@ -135,3 +174,10 @@ public class ImageHelperActivity extends AppCompatActivity {
     }
 
 }
+
+
+/*
+ URI stands for Uniform Resource Identifier.
+ In Android Studio, a URI is a string of characters that identifies a particular resource, such as a file or web page.
+ A URI can be used to locate a resource, identify a specific portion of a resource, or provide information about the resource.
+ */
