@@ -20,6 +20,5 @@ public class MainActivity extends AppCompatActivity {
         // start the image helper activity
         Intent intent = new Intent(this, ImageHelperActivity.class);
         startActivity(intent);
-
     }
  }

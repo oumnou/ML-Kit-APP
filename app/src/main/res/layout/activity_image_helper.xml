@@ -21,7 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#FDC5C5"
-            android:text="Start Camera"
+            android:text="@string/start_camera"
+            android:onClick="onStartCamera"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -33,7 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#FDC5C5"
-            android:text="Pick Image"
+            android:text="@string/pick_image"
+            android:onClick="onPickImage"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/buttonStartCamera"
             app:layout_constraintHorizontal_bias="0.5"
@@ -45,17 +49,20 @@
         android:id="@+id/imageViewInput"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewOutput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_launcher_background"
-        tools:layout_editor_absoluteY="-3dp" />
+        tools:ignore="ImageContrastCheck"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/textViewOutput"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="Output"
+        android:text="@string/output"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
