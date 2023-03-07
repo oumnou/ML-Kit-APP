@@ -31,6 +31,7 @@ import com.google.mlkit.vision.label.ImageLabeler;
 import com.google.mlkit.vision.label.ImageLabeling;
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -78,7 +79,7 @@ public class ImageHelperActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*"); //type of images
 
-        startActivityForResult(intent,1001);
+        startActivityForResult(intent,REQUEST_PICK_IMAGE);
     }
 
     public void onStartCamera(View view){
@@ -115,6 +116,7 @@ public class ImageHelperActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             if(requestCode == REQUEST_PICK_IMAGE){
+
                 Uri uri = data.getData();
                 Bitmap bitmap = loadFromUri(uri);
                 inputImageView.setImageBitmap(bitmap);
@@ -124,7 +126,7 @@ public class ImageHelperActivity extends AppCompatActivity {
                 Log.d("ML", "received callback from camera ");
                 Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 inputImageView.setImageBitmap(bitmap);
-                runClassification(bitmap);
+                 runClassification(bitmap);
             }
        }
     }
@@ -147,7 +149,7 @@ public class ImageHelperActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    private void runClassification(Bitmap bitmap){
+    protected void runClassification(Bitmap bitmap){
         InputImage inputImage = InputImage.fromBitmap(bitmap,0);
         imageLabeler.process(inputImage).addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
             @Override
@@ -173,6 +175,9 @@ public class ImageHelperActivity extends AppCompatActivity {
         });
     }
 
+    public TextView getOutputTextView(){
+        return outputTextView;
+    }
 }
 
 
