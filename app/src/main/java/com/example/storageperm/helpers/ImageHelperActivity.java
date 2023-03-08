@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageDecoder;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -91,7 +95,6 @@ public class ImageHelperActivity extends AppCompatActivity {
         // create an Intent
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT,fileUri);
-
         // startActivityForResult
         startActivityForResult(intent,REQUEST_CAPTURE_IMAGE);
     }
@@ -175,9 +178,45 @@ public class ImageHelperActivity extends AppCompatActivity {
         });
     }
 
-    public TextView getOutputTextView(){
+    protected TextView getOutputTextView(){
         return outputTextView;
     }
+    protected ImageView getInputImageView(){
+        return inputImageView;
+    }
+
+    protected void drawDetectionResult(List<BoxWithLabel>boxes, Bitmap bitmap){
+
+        Bitmap outputBitmap = bitmap.copy(Bitmap.Config.ARGB_8888,true);
+        Canvas canvas =  new Canvas(outputBitmap);
+        Paint penRect = new Paint();
+        penRect.setColor(Color.GREEN);
+        penRect.setStyle(Paint.Style.STROKE);
+        penRect.setStrokeWidth(8f);
+
+        Paint penLabel = new Paint();
+        penLabel.setColor(Color.YELLOW);
+        penLabel.setStyle(Paint.Style.FILL_AND_STROKE);
+        penLabel.setTextSize(96f);
+
+        for (BoxWithLabel boxWithLabel : boxes){
+            canvas.drawRect(boxWithLabel.rect, penRect);
+
+            // Rect
+            Rect labelSize = new Rect(0,0,0,0);
+            penLabel.getTextBounds(boxWithLabel.label, 0, boxWithLabel.label.length(), labelSize);
+            float fontSize = penLabel.getTextSize() * boxWithLabel.rect.width() / labelSize.width();
+
+            if( fontSize < penLabel.getTextSize()){
+                penLabel.setTextSize(fontSize);
+            }
+            canvas.drawText(boxWithLabel.label, boxWithLabel.rect.left, boxWithLabel.rect.top + labelSize.height(),penLabel);
+
+        }
+        getInputImageView().setImageBitmap(outputBitmap);
+    }
+
+
 }
 
 

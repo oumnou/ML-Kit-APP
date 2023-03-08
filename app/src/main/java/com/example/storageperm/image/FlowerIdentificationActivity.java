@@ -25,7 +25,7 @@ public class FlowerIdentificationActivity extends ImageClassificationActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("TAG", "onCreate: marouaaaaaaaaaaaaaaaaaane ");
+        Log.i("TAG", "onCreate:  ");
 
         LocalModel localModel = new LocalModel.Builder().setAssetFilePath("model_flowers.tflite").build();
 

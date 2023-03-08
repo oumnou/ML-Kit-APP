@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.storageperm.image.FlowerIdentificationActivity;
 import com.example.storageperm.image.ImageClassificationActivity;
+import com.example.storageperm.image.ObjectDetectionActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,4 +37,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, FlowerIdentificationActivity.class);
         startActivity(intent);
     }
- }
+
+    public void onGoToObjectDetection(View view ){
+        // start the image helper activity
+        Intent intent = new Intent(this, ObjectDetectionActivity.class);
+        startActivity(intent);
+    }
+
+}
