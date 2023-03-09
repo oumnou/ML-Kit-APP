@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">StoragePerm</string>
+    <string name="app_name">Our ML Kite 💙</string>
     <string name="pick_image">Pick Image</string>
     <string name="start_camera">Start Camera</string>
     <string name="output">Output</string>
     <string name="go_to_image_flower_identification">Go to Image Flower Identification</string>
     <string name="go_to_object_detection">Go to object detection</string>
+    <string name="go_to_face_detection">Go to face detection</string>
 </resources>

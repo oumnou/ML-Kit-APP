@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.storageperm.image.FaceDetectionActivity;
 import com.example.storageperm.image.FlowerIdentificationActivity;
 import com.example.storageperm.image.ImageClassificationActivity;
 import com.example.storageperm.image.ObjectDetectionActivity;
@@ -41,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
     public void onGoToObjectDetection(View view ){
         // start the image helper activity
         Intent intent = new Intent(this, ObjectDetectionActivity.class);
+        startActivity(intent);
+    }
+
+    public void onGoToFacedetection(View view ){
+        // start the image helper activity
+        Intent intent = new Intent(this, FaceDetectionActivity.class);
         startActivity(intent);
     }
 
